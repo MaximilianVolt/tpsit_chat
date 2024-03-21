@@ -8,6 +8,14 @@ public class ChatConnectorThread implements Runnable
   private BufferedReader input = null;
   private PrintWriter output = null;
 
+
+
+  /**
+   * Configura gli stream per la comunicazione.
+   * @param service_manager L'istanza del gestore della chat.
+   * @param client Il socket del client con cui comunicare.
+   */
+
   public ChatConnectorThread(ChatServiceManagerThread service_manager, Socket client)
   {
     this.service_manager = service_manager;
@@ -23,6 +31,12 @@ public class ChatConnectorThread implements Runnable
       output.println("Errore nella lettura: " + e.getMessage());
     }
   }
+
+
+
+  /**
+   * Effettua il caricamento dei messaggi della chat.
+   */
 
   @Override
   public void run()
@@ -45,10 +59,15 @@ public class ChatConnectorThread implements Runnable
     }
   }
 
+
+
+  /**
+   * Invia un messaggio del server nella chat.
+   * @param message Il messaggio da inviare.
+   */
+
   public void send_chat_message(String message)
   {
     output.println(message);
   }
-
-  
 }

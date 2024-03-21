@@ -7,6 +7,13 @@ class ChatServer extends JFrame
 {
   public UIChatPanel panel;
 
+
+
+  /**
+   * @see UIChatPanel
+   * Istanzia l'interfaccia grafica della finestra della chat del server.
+   */
+
   public ChatServer()
   {
     super("Chat server");
@@ -26,6 +33,13 @@ class ChatServer extends JFrame
 class ChatClient extends JFrame
 {
   public UIChatPanel panel;
+
+
+
+  /**
+   * @see UIChatPanel
+   * Istanzia l'interfaccia grafica della finestra della chat del client.
+   */
 
   public ChatClient()
   {
@@ -51,6 +65,12 @@ public class UIChatPanel extends JFrame implements ActionListener
   private final JPanel new_msg;
   private final JLabel new_msg_highlight;
   private final JTextField new_msg_content;
+
+
+
+  /**
+   * Definisce i parametri di configurazione dell'interfaccia grafica.
+   */
 
   public UIChatPanel()
   {
@@ -79,7 +99,7 @@ public class UIChatPanel extends JFrame implements ActionListener
 
     new_msg_highlight = new JLabel("New message: ", JLabel.CENTER);
     new_msg_highlight.setForeground(Color.GREEN);
-  
+
     new_msg_content = new JTextField("");
 
     JButton ui_button_send = new JButton("Send");
@@ -94,11 +114,24 @@ public class UIChatPanel extends JFrame implements ActionListener
     add(new_msg, BorderLayout.SOUTH);
   }
 
+
+
+  /**
+   * Istanzia e avvia un thread per la gestione della chat.
+   */
+
   public void connect()
   {
     service_manager = new ChatServiceManagerThread(10, ui_list);
     service_manager.run();
   }
+
+
+
+  /**
+   * Risponde all'esecuzione di un'azione di un componente.
+   * @param e L'evento da controllare.
+   */
 
   @Override
   public void actionPerformed(ActionEvent e)

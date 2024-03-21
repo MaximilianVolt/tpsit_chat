@@ -11,6 +11,14 @@ public class ChatServiceManagerThread implements Runnable
   private final ArrayList <ChatConnectorThread> connections;
   private ServerSocket server_chat;
 
+
+
+  /**
+   * Istanzia un thread per la gestione della chat.
+   * @param max_users Il numero massimo di utenti.
+   * @param message_list La lista di messaggi dell'UI
+   */
+
   public ChatServiceManagerThread(int max_users, List message_list)
   {
     this.connections = new ArrayList <> (max_users);
@@ -18,23 +26,19 @@ public class ChatServiceManagerThread implements Runnable
     this.message_list = message_list;
   }
 
+
+
+  /**
+   * Tenta la connessione ad un server socket per istanziare la chat.
+   */
+
   @Override
   public void run()
   {
-    boolean active = true;
-
     try
     {
       server_chat = new ServerSocket(6789);
-    }
-    catch (IOException e)
-    {
-      JOptionPane.showMessageDialog(null, "Impossibile istanziare il server.");
-      active = false;
-    }
 
-    if (active)
-    {
       try
       {
         for (int i = 0; i < max_users; i++)
@@ -50,7 +54,18 @@ public class ChatServiceManagerThread implements Runnable
         JOptionPane.showMessageDialog(null, "Impossibile istanziare la chat.");
       }
     }
+    catch (IOException e)
+    {
+      JOptionPane.showMessageDialog(null, "Impossibile istanziare il server.");
+    }
   }
+
+
+
+  /**
+   * Invia un messaggio.
+   * @param message Il messaggio da inviare.
+   */
 
   public void send_message(String message)
   {

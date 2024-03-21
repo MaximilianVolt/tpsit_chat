@@ -10,6 +10,15 @@ public class ChatClientThread implements  Runnable
   private BufferedReader input = null;
   private PrintWriter output = null;
 
+
+
+  /**
+   * Istanzia un thread per la ricezione dei messaggi del client.
+   * @param message_list L'elenco della lista dei messaggi.
+   * @param server_ip L'indirizzo IP del server.
+   * @param port La porta del socket client.
+   */
+
   public ChatClientThread(List message_list, String server_ip, int port)
   {
     this.message_list = message_list;
@@ -25,6 +34,10 @@ public class ChatClientThread implements  Runnable
       JOptionPane.showMessageDialog(null, "Impossibile connettersi al server.");
     }
   }
+
+  /**
+   * Effettua il caricamento dei messaggi della chat.
+   */
 
   @Override
   public void run()
@@ -46,6 +59,13 @@ public class ChatClientThread implements  Runnable
       }
     }
   }
+
+
+
+  /**
+   * Invia il messaggio del client in chat.
+   * @param message Il messaggio da inviare.
+   */
 
   public void chat_send_message(String message)
   {
