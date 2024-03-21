@@ -69,8 +69,9 @@ public class ChatServiceManagerThread implements Runnable
 
   public void send_message(String message)
   {
-    message_list.add(message);
     int queue_size = connections.size();
+    message_list.select(message_list.getItemCount());
+    message_list.add(message);
 
     for (int i = 0; i < queue_size; i++)
     {

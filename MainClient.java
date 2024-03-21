@@ -2,7 +2,8 @@ public class MainClient
 {
   public static void main(String[] args)
   {
-    ChatClient client = new ChatClient();
+    String client_name = System.getProperty("user.name");
+    ChatClient client = new ChatClient(client_name);
     client.panel.connect();
   }
 }

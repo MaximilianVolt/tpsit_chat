@@ -62,7 +62,7 @@ public class ChatConnectorThread implements Runnable
 
 
   /**
-   * Invia un messaggio del server nella chat.
+   * Invia un messaggio nella chat.
    * @param message Il messaggio da inviare.
    */
 

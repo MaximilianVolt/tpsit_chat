@@ -5,6 +5,7 @@ import javax.swing.*;
 
 class ChatServer extends JFrame
 {
+  public final String name = "Server";
   public UIChatPanel panel;
 
 
@@ -22,7 +23,7 @@ class ChatServer extends JFrame
     setLocationRelativeTo(null);
     setEnabled(true);
     setBackground(Color.BLUE);
-    panel = new UIChatPanel();
+    panel = new UIChatPanel(name);
     getContentPane().add(panel);
     setVisible(true);
   }
@@ -32,6 +33,7 @@ class ChatServer extends JFrame
 
 class ChatClient extends JFrame
 {
+  private final String name;
   public UIChatPanel panel;
 
 
@@ -41,15 +43,16 @@ class ChatClient extends JFrame
    * Istanzia l'interfaccia grafica della finestra della chat del client.
    */
 
-  public ChatClient()
+  public ChatClient(String name)
   {
     super("Chat client");
 
+    this.name = name;
     setSize(new Dimension(500, 300));
     setLocationRelativeTo(null);
     setEnabled(true);
     setBackground(Color.BLUE);
-    panel = new UIChatPanel();
+    panel = new UIChatPanel(name);
     getContentPane().add(panel);
     setVisible(true);
   }
@@ -60,6 +63,7 @@ class ChatClient extends JFrame
 
 public class UIChatPanel extends JFrame implements ActionListener
 {
+  private String name;
   private ChatServiceManagerThread service_manager;
   private final List ui_list;
   private final JPanel new_msg;
@@ -70,11 +74,13 @@ public class UIChatPanel extends JFrame implements ActionListener
 
   /**
    * Definisce i parametri di configurazione dell'interfaccia grafica.
+   * @param name Il nome del
    */
 
-  public UIChatPanel()
+  public UIChatPanel(String name)
   {
     super();
+    this.name = name;
 
     setBackground(Color.MAGENTA);
     JPanel panel_list = new JPanel(new BorderLayout(20, 5));
@@ -85,14 +91,14 @@ public class UIChatPanel extends JFrame implements ActionListener
     ui_list.setSize(100, 50);
     ui_list.setVisible(true);
 
-    JLabel chat_1 = new JLabel("Chat", JLabel.CENTER);
-    JLabel chat_2 = new JLabel("Chat 2", JLabel.CENTER);
-    chat_1.setForeground(Color.ORANGE);
-    chat_2.setForeground(Color.YELLOW);
+    JLabel chat_1_label = new JLabel("Server", JLabel.CENTER);
+    JLabel chat_2_label = new JLabel(name, JLabel.CENTER);
+    chat_1_label.setForeground(Color.ORANGE);
+    chat_2_label.setForeground(Color.YELLOW);
 
-    panel_list.add(chat_1, BorderLayout.WEST);
+    panel_list.add(chat_1_label, BorderLayout.WEST);
     panel_list.add(ui_list, BorderLayout.CENTER);
-    panel_list.add(chat_2, BorderLayout.EAST);
+    panel_list.add(chat_2_label, BorderLayout.EAST);
 
     new_msg = new JPanel(new BorderLayout(20, 5));
     new_msg.setBackground(Color.CYAN);
@@ -136,9 +142,9 @@ public class UIChatPanel extends JFrame implements ActionListener
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    String ui_button = e.getActionCommand();
+    String ui_button_command = e.getActionCommand();
 
-    if (ui_button.equals("Send"))
+    if (ui_button_command.equals("Send"))
     {
       service_manager.send_message(new_msg_content.getText());
       new_msg_content.setText("");
