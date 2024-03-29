@@ -6,10 +6,12 @@ import javax.swing.JOptionPane;
 
 public class ChatServiceManagerThread implements Runnable
 {
+  private final int port;
   private final int max_users;
   private final List message_list;
   private final ArrayList <ChatConnectorThread> connections;
   private ServerSocket server_chat;
+  
 
 
 
@@ -17,13 +19,15 @@ public class ChatServiceManagerThread implements Runnable
    * Istanzia un thread per la gestione della chat.
    * @param max_users Il numero massimo di utenti.
    * @param message_list La lista di messaggi dell'UI
+   * @param port La porta dell'host.
    */
 
-  public ChatServiceManagerThread(int max_users, List message_list)
+  public ChatServiceManagerThread(int max_users, List message_list, int port)
   {
     this.connections = new ArrayList <> (max_users);
-    this.max_users = max_users;
     this.message_list = message_list;
+    this.max_users = max_users;
+    this.port = port;
   }
 
 
@@ -37,14 +41,14 @@ public class ChatServiceManagerThread implements Runnable
   {
     try
     {
-      server_chat = new ServerSocket(6789);
+      server_chat = new ServerSocket(port);
 
       try
       {
         for (int i = 0; i < max_users; i++)
         {
           Socket temp = server_chat.accept();
-          connections.set(i, new ChatConnectorThread(this, temp));
+          connections.set(i, new ChatConnectorThread(this, temp, port));
         }
 
         server_chat.close();

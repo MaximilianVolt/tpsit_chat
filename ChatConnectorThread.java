@@ -4,9 +4,10 @@ import java.net.*;
 public class ChatConnectorThread implements Runnable
 {
   private ChatServiceManagerThread service_manager;
-  private Socket client;
   private BufferedReader input = null;
   private PrintWriter output = null;
+  private Socket client;
+  private int port;
 
 
 
@@ -14,12 +15,14 @@ public class ChatConnectorThread implements Runnable
    * Configura gli stream per la comunicazione.
    * @param service_manager L'istanza del gestore della chat.
    * @param client Il socket del client con cui comunicare.
+   * @param port La porta dell'host.
    */
 
-  public ChatConnectorThread(ChatServiceManagerThread service_manager, Socket client)
+  public ChatConnectorThread(ChatServiceManagerThread service_manager, Socket client, int port)
   {
     this.service_manager = service_manager;
     this.client = client;
+    this.port = port;
 
     try
     {

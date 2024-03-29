@@ -5,6 +5,7 @@ import javax.swing.*;
 
 class ChatServer extends JFrame
 {
+  private final int port;
   public final String name = "Server";
   public UIChatPanel panel;
 
@@ -15,15 +16,16 @@ class ChatServer extends JFrame
    * Istanzia l'interfaccia grafica della finestra della chat del server.
    */
 
-  public ChatServer()
+  public ChatServer(int port)
   {
     super("Chat server");
 
+    this.port = port;
     setSize(new Dimension(500, 300));
     setLocationRelativeTo(null);
     setEnabled(true);
     setBackground(Color.BLUE);
-    panel = new UIChatPanel(name);
+    panel = new UIChatPanel(name, this.port);
     getContentPane().add(panel);
     setVisible(true);
   }
@@ -33,6 +35,7 @@ class ChatServer extends JFrame
 
 class ChatClient extends JFrame
 {
+  private final int port;
   private final String name;
   public UIChatPanel panel;
 
@@ -43,16 +46,17 @@ class ChatClient extends JFrame
    * Istanzia l'interfaccia grafica della finestra della chat del client.
    */
 
-  public ChatClient(String name)
+  public ChatClient(String name, int port)
   {
     super("Chat client");
 
     this.name = name;
+    this.port = port;
     setSize(new Dimension(500, 300));
     setLocationRelativeTo(null);
     setEnabled(true);
     setBackground(Color.BLUE);
-    panel = new UIChatPanel(name);
+    panel = new UIChatPanel(this.name, this.port);
     getContentPane().add(panel);
     setVisible(true);
   }
@@ -61,9 +65,10 @@ class ChatClient extends JFrame
 
 
 
-public class UIChatPanel extends JFrame implements ActionListener
+public class UIChatPanel extends JPanel implements ActionListener
 {
-  private String name;
+  private final int port;
+  private final String name;
   private ChatServiceManagerThread service_manager;
   private final List ui_list;
   private final JPanel new_msg;
@@ -74,39 +79,41 @@ public class UIChatPanel extends JFrame implements ActionListener
 
   /**
    * Definisce i parametri di configurazione dell'interfaccia grafica.
-   * @param name Il nome del
+   * @param name Il nome dell'host.
+   * @param port La porta dell'host.
    */
 
-  public UIChatPanel(String name)
+  public UIChatPanel(String name, int port)
   {
     super();
     this.name = name;
+    this.port = port;
 
-    setBackground(Color.MAGENTA);
+    setBackground(Color.DARK_GRAY);
     JPanel panel_list = new JPanel(new BorderLayout(20, 5));
-    panel_list.setBackground(Color.MAGENTA);
+    panel_list.setBackground(Color.DARK_GRAY);
 
     ui_list = new List();
     ui_list.setBackground(Color.LIGHT_GRAY);
     ui_list.setSize(100, 50);
     ui_list.setVisible(true);
 
-    JLabel chat_1_label = new JLabel("Server", JLabel.CENTER);
+    JLabel chat_1_label = new JLabel(this.name, JLabel.CENTER);
     JLabel chat_2_label = new JLabel(name, JLabel.CENTER);
     chat_1_label.setForeground(Color.ORANGE);
-    chat_2_label.setForeground(Color.YELLOW);
+    chat_2_label.setForeground(Color.LIGHT_GRAY);
 
     panel_list.add(chat_1_label, BorderLayout.WEST);
     panel_list.add(ui_list, BorderLayout.CENTER);
     panel_list.add(chat_2_label, BorderLayout.EAST);
 
     new_msg = new JPanel(new BorderLayout(20, 5));
-    new_msg.setBackground(Color.CYAN);
+    new_msg.setBackground(Color.DARK_GRAY);
 
     new_msg_highlight = new JLabel("New message: ", JLabel.CENTER);
-    new_msg_highlight.setForeground(Color.GREEN);
+    new_msg_highlight.setForeground(Color.WHITE);
 
-    new_msg_content = new JTextField("");
+    new_msg_content = new JTextField();
 
     JButton ui_button_send = new JButton("Send");
     ui_button_send.addActionListener(this);
@@ -128,7 +135,7 @@ public class UIChatPanel extends JFrame implements ActionListener
 
   public void connect()
   {
-    service_manager = new ChatServiceManagerThread(10, ui_list);
+    service_manager = new ChatServiceManagerThread(10, ui_list, port);
     service_manager.run();
   }
 
@@ -142,11 +149,9 @@ public class UIChatPanel extends JFrame implements ActionListener
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    String ui_button_command = e.getActionCommand();
-
-    if (ui_button_command.equals("Send"))
+    if (!new_msg_content.getText().isBlank())
     {
-      service_manager.send_message(new_msg_content.getText());
+      service_manager.send_message(name + ": " + new_msg_content.getText());
       new_msg_content.setText("");
     }
   }
