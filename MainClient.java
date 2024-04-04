@@ -4,6 +4,12 @@ public class MainClient
 {
   private static final Scanner keyboard = new Scanner(System.in);
 
+
+
+  /** 
+   * @param args
+   */
+
   public static void main(String[] args)
   {
     System.out.println("Inserisci il nome del nuovo client:");
